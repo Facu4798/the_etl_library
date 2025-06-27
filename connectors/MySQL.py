@@ -55,14 +55,22 @@ class MySQLConnector:
         self.cursor.execute(f"SHOW {type} LIKE '{name}'")
         return self.cursor.fetchone() is not None
 
-    def insert_data(self,data,table_name):
+    def insert_data(self,data,table_name,pks=None):
         # check table existance
         if self.check_existance('TABLE', table_name):
             pass
         else:
+            dtype_mapper = DTypeMapper()
+            dtypes = dtype_mapper.map(data)
             q = f"""
-            CREATE TABLE IF NOT EXISTS {table_name}
+            CREATE TABLE IF NOT EXISTS {table_name} (
+                {', '.join(f'{col} {dtype}' for col, dtype in dtypes.items())}
+            )
             """
+            if pks!=None:
+                q += f", PRIMARY KEY ({', '.join(pks)})"
+            self.cursor.execute(q)
+            self.connection.commit()
 
     def close(self):
         if self.connection and self.connection.is_connected():
