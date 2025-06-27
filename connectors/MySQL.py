@@ -55,11 +55,22 @@ class MySQLConnector:
         self.cursor.execute(f"SHOW {type} LIKE '{name}'")
         return self.cursor.fetchone() is not None
 
-    def insert_data(self,data,table_name,pks=None):
+    def insert_data(self,data,table_name):
         # check table existance
         if self.check_existance('TABLE', table_name):
             pass
         else:
+            print(f"Table {table_name} does not exist.")
+            return None
+
+    def create_table(self, query = None,data=None,table_name=None, pks=None):
+        if query != None:
+            pass
+        
+        if data is not None and table_name is not None:
+            if self.check_existance('TABLE', table_name):
+                print(f"Table {table_name} already exists.")
+                return None
             dtype_mapper = DTypeMapper()
             dtypes = dtype_mapper.map(data)
             q = f"""
@@ -87,7 +98,7 @@ class DTypeMapper:
         self.map_dict = {}
 
     def map(self,data):
-        import pandas as pd
+        import pandas as pd        
         dtypes = data.dtypes
         for col, dtype in dtypes.items():
             if pd.api.types.is_integer_dtype(dtype):
