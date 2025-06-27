@@ -62,6 +62,16 @@ class MySQLConnector:
         else:
             print(f"Table {table_name} does not exist.")
             return None
+        
+        # insert data
+        import pandas as pd
+        if isinstance(data, pd.DataFrame):
+            columns = ', '.join(data.columns)
+            placeholders = ', '.join(['%s'] * len(data.columns))
+            query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+            values = [tuple(row) for row in data.values]
+            self.cursor.executemany(query, values)
+            self.connection.commit()
 
     def create_table(self, query = None,data=None,table_name=None, pks=None):
         if query != None:
