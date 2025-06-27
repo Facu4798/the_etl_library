@@ -8,6 +8,7 @@ class MySQLConnector:
 
     def test_connection(self):
         import mysql.connector
+        connection = None
         try:
             connection = mysql.connector.connect(
                 host=self.host,
@@ -17,12 +18,19 @@ class MySQLConnector:
             )
             if connection.is_connected():
                 print("Connection successful")
+                return True
         except mysql.connector.Error as err:
             print(f"Error: {err}")
             return False
         finally:
-            if connection.is_connected():
+            if connection and connection.is_connected():
                 connection.close()
+
+    def get_data():
+        pass
+
+    def insert_data():
+        pass
 
 conn = MySQLConnector({
     'host': 'localhost',
