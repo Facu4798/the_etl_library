@@ -55,7 +55,7 @@ class MySQLConnector:
         self.cursor.execute(f"SHOW {type} LIKE '{name}'")
         return self.cursor.fetchone() is not None
 
-    def insert_data(self,data,table_name):
+    def insert_data(self,data,table_name,pks= None):
         # check table existance
         if self.check_existance('TABLE', table_name):
             pass
@@ -69,6 +69,9 @@ class MySQLConnector:
             columns = ', '.join(data.columns)
             placeholders = ', '.join(['%s'] * len(data.columns))
             query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+            if pks is not None:
+                update_set = ', '.join([f"{col} = VALUES({col})" for col in data.columns if col not in pks])
+                query += f" ON DUPLICATE KEY UPDATE {update_set}"
             values = [tuple(row) for row in data.values]
             self.cursor.executemany(query, values)
             self.connection.commit()
