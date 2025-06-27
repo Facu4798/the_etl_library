@@ -26,17 +26,17 @@ class MySQLConnector:
             if connection and connection.is_connected():
                 connection.close()
 
-    def get_data():
-        pass
+    def get_data(self,query):
+        import mysql.connector
+        import pandas as pd
+        connection = mysql.connector.connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            database=self.database
+        )
 
-    def insert_data():
-        pass
-
-conn = MySQLConnector({
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'password',
-    'database': 'test_db'
-})
-
-conn.test_connection()
+        cursor = connection.cursor()
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return pd.DataFrame(result, columns=[i[0] for i in cursor.description])
