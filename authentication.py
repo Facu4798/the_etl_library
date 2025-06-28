@@ -12,8 +12,11 @@ class Credentials:
         print(self.__str__())
 
     def __str__(self):
-        mk = max(len(k) for k in self.dict.keys())
-        s2 = "Credentials:\n"
-        for k, v in self.dict.items():
-            s2 += f"{k.ljust(mk+2)} = {v}\n"
-        return s2
+        try:
+            mk = max(len(k) for k in self.dict.keys())
+            s2 = "Credentials:\n"
+            for k, v in self.dict.items():
+                s2 += f"{k.ljust(mk+2)} = {v}\n"
+            return s2
+        except:
+            print("No credentials found")
