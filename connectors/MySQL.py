@@ -9,6 +9,12 @@ class MySQLConnector:
     def test_connection(self):
         import mysql.connector
         connection = None
+        required_params = ['host', 'user', 'password', 'database', 'port']
+        for p in required_params:
+            if not hasattr(self, p):
+                print(f"Missing required parameter: {p}")
+                return ""
+
         try:
             connection = mysql.connector.connect(
                 host=self.host,
