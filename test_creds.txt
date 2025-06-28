@@ -1,1 +1,5 @@
 password : AVNS_vBt5bLw5TLinvY6G_Eo
+port : 24195
+database : defaultdb
+host : avnadmin
+user : avnadmin
