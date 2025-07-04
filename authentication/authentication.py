@@ -133,8 +133,6 @@ class Credentials:
         """
         s = self.__str__()
         print(s)
-        print(2222)
-        return ""
 
     def __str__(self):
         try:
