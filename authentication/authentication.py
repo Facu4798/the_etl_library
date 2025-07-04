@@ -105,10 +105,10 @@ class Credentials:
         try:
             file_path.unlink()
             print(f"Credential file '{file_path.name}' deleted successfully")
-            return True
+            return None
         except Exception as e:
             print(f"Error deleting credential file: {e}")
-            return False
+            return None
 
     def add_credential(self, key=None, value=None,dict=None):
         """
