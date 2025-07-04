@@ -1,6 +1,7 @@
 class Env:
     def __init__(self):
         self.items = []
+        self.activities = []
         import numpy as np
         self.matrix = np.array([])
 
@@ -32,14 +33,20 @@ class Env:
 
     def _add_item(self,item,parent=None):
         import numpy as np
+        self.activities.append(item)
         self.items.append(item.id)
-        # add a new column for the item
-        self.matrix = np.append(self.matrix, np.zeros((self.matrix.shape[0], 1)), axis=1)
-        # add a new row for the item
-        self.matrix = np.append(self.matrix, np.zeros((1, self.matrix.shape[1])), axis=0)
+        if self.matrix.shape[0] == 0:
+            # Initialize the matrix with a single item
+            self.matrix = np.array([[0]])
+        else:
+            # add a new column for the item
+            self.matrix = np.append(self.matrix, np.zeros((self.matrix.shape[0], 1)), axis=1)
+            # add a new row for the item
+            self.matrix = np.append(self.matrix, np.zeros((1, self.matrix.shape[1])), axis=0)
         # set the parent-item relationship
-        parent_index = self.items.index(parent.id)
-        self.matrix[parent_index, -1] = 1
+        if parent != None:
+            parent_index = self.items.index(parent.id)
+            self.matrix[parent_index, -1] = 1
         
 
     def run(self):
