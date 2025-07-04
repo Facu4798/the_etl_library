@@ -1,11 +1,7 @@
 """
-The ETL Library - A Python library for ETL operations with credential management
+Authentication module for the ETL Library
 """
 
-from .authentication.authentication import Credentials
-from .connectors import *
-
-__version__ = "0.1.0"
-__author__ = "Your Name"
+from .authentication import Credentials
 
 __all__ = ["Credentials"]

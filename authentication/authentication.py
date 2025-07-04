@@ -131,7 +131,10 @@ class Credentials:
         """
         Show the current credentials in the Credentials object.
         """
-        return self.__str__()
+        s = self.__str__()
+        print(s)
+        print(2222)
+        return ""
 
     def __str__(self):
         try:
