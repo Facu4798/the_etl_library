@@ -1,6 +1,5 @@
 import os
 import json
-import pickle
 from pathlib import Path
 
 class Credentials:
