@@ -1,66 +1,55 @@
 import os
 import json
-import pickle
 from pathlib import Path
 
 class Credentials:
-    def __init__(self,params):
+    def __init__(self,params = {}):
         for key, value in params.items():
             setattr(self, key, value)
-        try:
-            self.dict = params
-        except:
-            self.dict = {}
+        self.dict = params
 
 
     def _get_credentials_directory(self):
         """Get the directory where credentials should be stored (in the library installation)"""
-        # Get the directory where this module is installed
-        module_dir = Path(__file__).parent
-        credentials_dir = module_dir / ".credentials"
         
-        # Create the directory if it doesn't exist
-        credentials_dir.mkdir(exist_ok=True)
+        module_dir = Path(__file__).parent # Get the directory where this module is installed
+        credentials_dir = module_dir / "credentials"
         
         return credentials_dir
 
-    def _get_credential_file_path(self, name=None, file_format='json'):
+    def _get_credential_file_path(self, name=None):
         """Get the full path for a credential file"""
-        if name is None:
-            name = self.credential_name or "default"
-        
-        filename = f"{name}.{file_format}"
-        return self._credentials_dir / filename
+        return self._get_credentials_directory() / f"{name}.json"
 
-    def save(self, name=None, file_format='json', overwrite=False):
+    def list(self):
+        """
+        lists all the credentials in the saved credentials directory
+        """
+        import os
+        for f in os.listdir(self._get_credentials_directory()):
+            print(f)
+
+    def save(self, name=None, overwrite=False):
         """
         Save credentials to a file in the library installation directory
-        - name: name for the credential file (defaults to credential_name or 'default')
-        - file_format: 'json' or 'pickle' (default: 'json')
+        - name: name for the credential file
         - overwrite: whether to overwrite existing files (default: False)
         
         Returns: path to the saved file or None if failed
         """
-        if not self.dict:
+        if len(self.dict.keys())==0:
             print("No credentials to save")
             return None
         
-        file_path = self._get_credential_file_path(name, file_format)
+        file_path = self._get_credential_file_path(name)
         
         if file_path.exists() and not overwrite:
             print(f"Credential file '{file_path.name}' already exists. Use overwrite=True to replace it.")
             return None
         
         try:
-            if file_format.lower() == 'json':
-                with open(file_path, 'w') as f:
-                    json.dump(self.dict, f, indent=2)
-            elif file_format.lower() == 'pickle':
-                with open(file_path, 'wb') as f:
-                    pickle.dump(self.dict, f)
-            else:
-                print(f"Unsupported file format: {file_format}. Use 'json' or 'pickle'.")
-                return None
+            with open(file_path, 'w') as f:
+                json.dump(self.dict, f, indent=2)
             
             print(f"Credentials saved to: {file_path}")
             return str(file_path)
@@ -69,30 +58,22 @@ class Credentials:
             print(f"Error saving credentials: {e}")
             return None
 
-    def load(self, name=None, file_format='json'):
+    def load(self, name=None):
         """
         Load credentials from a file in the library installation directory
-        - name: name of the credential file to load (defaults to credential_name or 'default')
-        - file_format: 'json' or 'pickle' (default: 'json')
+        - name: name of the credential file to load
         
         Returns: True if successful, False otherwise
         """
-        file_path = self._get_credential_file_path(name, file_format)
+        file_path = self._get_credential_file_path(name)
         
         if not file_path.exists():
-            print(f"Credential file '{file_path.name}' not found in {self._credentials_dir}")
+            print(f"Credential file '{file_path.name}' not found")
             return False
         
         try:
-            if file_format.lower() == 'json':
-                with open(file_path, 'r') as f:
-                    loaded_creds = json.load(f)
-            elif file_format.lower() == 'pickle':
-                with open(file_path, 'rb') as f:
-                    loaded_creds = pickle.load(f)
-            else:
-                print(f"Unsupported file format: {file_format}. Use 'json' or 'pickle'.")
-                return False
+            with open(file_path, 'r') as f:
+                loaded_creds = json.load(f)
             
             # Update the current credentials
             self.dict.update(loaded_creds)
@@ -100,47 +81,22 @@ class Credentials:
                 setattr(self, key, value)
             
             print(f"Credentials loaded from: {file_path}")
-            return True
+            return self
             
         except Exception as e:
             print(f"Error loading credentials: {e}")
-            return False
+            return self
 
-    def list_saved_credentials(self):
-        """List all saved credential files"""
-        if not self._credentials_dir.exists():
-            print("No credentials directory found")
-            return []
-        
-        credential_files = []
-        for file_path in self._credentials_dir.iterdir():
-            if file_path.is_file() and file_path.suffix in ['.json', '.pickle']:
-                credential_files.append({
-                    'name': file_path.stem,
-                    'format': file_path.suffix[1:],  # Remove the dot
-                    'path': str(file_path),
-                    'size': file_path.stat().st_size
-                })
-        
-        if credential_files:
-            print("Saved credentials:")
-            for cred in credential_files:
-                print(f"  - {cred['name']} ({cred['format']}) - {cred['size']} bytes")
-        else:
-            print("No saved credentials found")
-        
-        return credential_files
-
-    def delete_saved_credential(self, name, file_format='json'):
+    
+    def delete(self, name):
         """
         Delete a saved credential file
         - name: name of the credential file to delete
-        - file_format: 'json' or 'pickle' (default: 'json')
         
         Returns: True if successful, False otherwise
         """
-        file_path = self._get_credential_file_path(name, file_format)
-        
+        file_path = self._get_credential_file_path(name)
+
         if not file_path.exists():
             print(f"Credential file '{file_path.name}' not found")
             return False
@@ -148,29 +104,34 @@ class Credentials:
         try:
             file_path.unlink()
             print(f"Credential file '{file_path.name}' deleted successfully")
-            return True
+            return None
         except Exception as e:
             print(f"Error deleting credential file: {e}")
-            return False
+            return None
 
-    def add_credential(self, key, value):
+    def add_credential(self, key=None, value=None,dict=None):
         """
         Add a credential to the credentials object
         - key: the name of the credential
         - value: the value of the credential
         
-        ```
-        creds = Credentials().add_credential("username", "admin")
-        ```
+        >>> creds = Credentials().add_credential("username", "admin")
         """
-        setattr(self, key, value)
-        self.dict[key] = value
+        if dict != None:
+            for k, v in dict.items():
+                setattr(self, k, v)
+                self.dict[k] = v
+        if key!=None and value != None:
+            setattr(self, key, value)
+            self.dict[key] = value
         return self  # Enable method chaining
 
-
-
     def show(self):
-        print(self.__str__())
+        """
+        Show the current credentials in the Credentials object.
+        """
+        s = self.__str__()
+        print(s)
 
     def __str__(self):
         try:
@@ -181,5 +142,5 @@ class Credentials:
             for k, v in self.dict.items():
                 s2 += f"{k.ljust(mk+2)} = {v}\n"
             return s2
-        except Exception:
+        except:
             return "No credentials found"
