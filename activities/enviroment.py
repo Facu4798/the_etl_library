@@ -58,7 +58,7 @@ class Env:
             self.matrix[parent_index, -1] = 1
         
 
-    def run(self):
+    def run(self,input=None):
         """
         Execute all activities in the DAG based on topological order.
         Returns a dictionary mapping activity IDs to their outputs.
@@ -83,10 +83,12 @@ class Env:
                     
         
         # Topological sort using Kahn's algorithm
+        num_roots = 0
         queue = deque()
         for i in range(n):
             if in_degree[i] == 0: # no left vicinity(root nodes)
                 queue.append(i)
+                num_roots += 1
                 
         execution_order = []
         while queue: # while queue has elements
@@ -106,6 +108,7 @@ class Env:
         outputs = {}
         activity_outputs = {}  # Map activity index to output
         
+        count = 0
         for activity_idx in execution_order:
             activity = self.activities[activity_idx] # get activity object
             
@@ -126,7 +129,10 @@ class Env:
             activity.input = inputs
             
             # Run the activity
-            activity.run()
+            if count < num_roots:
+                activity.run(input)
+            else:
+                activity.run()
 
         return None
 
