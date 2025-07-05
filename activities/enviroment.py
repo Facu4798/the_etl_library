@@ -44,7 +44,7 @@ class Env:
             raise ValueError(f"Item with id {item.id} already exists in the environment.")
         self.activities.append(item)
         self.items.append(item.id)
-        if self.matrix.shape[0] == 0:
+        if self.matrix.shape[0] == 0:#for root activity(empty matrix)
             # Initialize the matrix with a single item
             self.matrix = np.array([[0]])
         else:
@@ -72,25 +72,26 @@ class Env:
         # Create adjacency list from matrix for easier traversal
         n = len(self.items)
         adj_list = defaultdict(list)
-        in_degree = [0] * n
-        
+        in_degree = [0] * n # left vicinity
+
         # Build adjacency list and calculate in-degrees
         for i in range(n):
             for j in range(n):
                 if self.matrix[i, j] == 1:
-                    adj_list[i].append(j)
-                    in_degree[j] += 1
+                    adj_list[i].append(j) # add right vicinity to i
+                    in_degree[j] += 1 # increase left vicinity of j
+                    
         
         # Topological sort using Kahn's algorithm
         queue = deque()
         for i in range(n):
-            if in_degree[i] == 0:
+            if in_degree[i] == 0: # no left vicinity(root nodes)
                 queue.append(i)
-        
+                
         execution_order = []
-        while queue:
-            current = queue.popleft()
-            execution_order.append(current)
+        while queue: # while queue has elements
+            current = queue.popleft() # get first element
+            execution_order.append(current) # add it to execution order
             
             for neighbor in adj_list[current]:
                 in_degree[neighbor] -= 1
@@ -106,34 +107,30 @@ class Env:
         activity_outputs = {}  # Map activity index to output
         
         for activity_idx in execution_order:
-            activity = self.activities[activity_idx]
+            activity = self.activities[activity_idx] # get activity object
             
-            # Collect inputs from parent activities
-            parent_outputs = []
-            for parent_idx in range(n):
-                if self.matrix[parent_idx, activity_idx] == 1:
-                    if parent_idx in activity_outputs:
-                        parent_outputs.append(activity_outputs[parent_idx])
-            
-            # Determine input for current activity
-            if len(parent_outputs) == 0:
-                # No parents, use activity's predefined input
-                activity_input = None
-            elif len(parent_outputs) == 1:
-                # Single parent, pass its output directly
-                activity_input = parent_outputs[0]
+            # Get input from parent activities
+            inputs = {}
+            if activity.parent is None:
+                inputs = None
             else:
-                # Multiple parents, pass list of outputs
-                activity_input = parent_outputs
+                if type(activity.parent) == list:
+                    for parent in activity.parent:
+                        inputs.update({parent.output_name: parent.output})
+                        parent.output = None  # Clear parent's output to release memory
+                else:
+                    inputs = {activity.parent.output_name : activity.parent.output}
+                    activity.parent.output = None  # Clear parent's output to release memory
+            
+            #update activity input
+            activity.input = inputs
             
             # Run the activity
-            output = activity.run(activity_input)
-            activity_outputs[activity_idx] = output
-            outputs[activity.id] = output
-        
-        return outputs
+            activity.run()
+
+        return None
 
     def __str__(self):
-        return "ETL enviroment"
+        return "ETL environment"
     
 
