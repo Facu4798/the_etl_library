@@ -59,12 +59,79 @@ class Env:
         
 
     def run(self):
-        # get the index of the root item(all zeros in the matrix)
+        """
+        Execute all activities in the DAG based on topological order.
+        Returns a dictionary mapping activity IDs to their outputs.
+        """
         import numpy as np
-        root_index = np.where(~self.matrix.any(axis=1))[0]
+        from collections import deque, defaultdict
         
-        output = []
-        return output
+        if len(self.activities) == 0:
+            return {}
+        
+        # Create adjacency list from matrix for easier traversal
+        n = len(self.items)
+        adj_list = defaultdict(list)
+        in_degree = [0] * n
+        
+        # Build adjacency list and calculate in-degrees
+        for i in range(n):
+            for j in range(n):
+                if self.matrix[i, j] == 1:
+                    adj_list[i].append(j)
+                    in_degree[j] += 1
+        
+        # Topological sort using Kahn's algorithm
+        queue = deque()
+        for i in range(n):
+            if in_degree[i] == 0:
+                queue.append(i)
+        
+        execution_order = []
+        while queue:
+            current = queue.popleft()
+            execution_order.append(current)
+            
+            for neighbor in adj_list[current]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    queue.append(neighbor)
+        
+        # Check for cycles
+        if len(execution_order) != n:
+            raise ValueError("Cycle detected in the DAG. Cannot execute.")
+        
+        # Execute activities in topological order
+        outputs = {}
+        activity_outputs = {}  # Map activity index to output
+        
+        for activity_idx in execution_order:
+            activity = self.activities[activity_idx]
+            
+            # Collect inputs from parent activities
+            parent_outputs = []
+            for parent_idx in range(n):
+                if self.matrix[parent_idx, activity_idx] == 1:
+                    if parent_idx in activity_outputs:
+                        parent_outputs.append(activity_outputs[parent_idx])
+            
+            # Determine input for current activity
+            if len(parent_outputs) == 0:
+                # No parents, use activity's predefined input
+                activity_input = None
+            elif len(parent_outputs) == 1:
+                # Single parent, pass its output directly
+                activity_input = parent_outputs[0]
+            else:
+                # Multiple parents, pass list of outputs
+                activity_input = parent_outputs
+            
+            # Run the activity
+            output = activity.run(activity_input)
+            activity_outputs[activity_idx] = output
+            outputs[activity.id] = output
+        
+        return outputs
 
     def __str__(self):
         return "ETL enviroment"
