@@ -54,8 +54,13 @@ class Env:
             self.matrix = np.append(self.matrix, np.zeros((1, self.matrix.shape[1])), axis=0)
         # set the parent-item relationship
         if parent != None:
-            parent_index = self.items.index(parent.id)
-            self.matrix[parent_index, -1] = 1
+            if type(parent) == list:
+                for p in parent:
+                    parent_index = self.items.index(p.id)
+                    self.matrix[parent_index, -1] = 1
+            else:
+                parent_index = self.items.index(parent.id)
+                self.matrix[parent_index, -1] = 1
         
 
     def run(self,input=None):
