@@ -6,6 +6,12 @@ class Env:
         self.matrix = np.array([])
 
     def show(self,fig_scale=1.5,node_scale=1000):
+        """
+        Plot a DAG of the environment's activities.
+        The nodes are the activities, and the edges are data transfers between them.
+        - **fig_scale:** scale of the matplotlib figure
+        - **node_scale:** scale of the nodes in the graph
+        """
         import networkx as nx
         import matplotlib.pyplot as plt
         import numpy as np
@@ -32,7 +38,10 @@ class Env:
         plt.show()
 
     def _add_item(self,item,parent=None):
+        
         import numpy as np
+        if item.id in self.items:
+            raise ValueError(f"Item with id {item.id} already exists in the environment.")
         self.activities.append(item)
         self.items.append(item.id)
         if self.matrix.shape[0] == 0:
