@@ -59,7 +59,12 @@ class Env:
         
 
     def run(self):
-        pass
+        # get the index of the root item(all zeros in the matrix)
+        import numpy as np
+        root_index = np.where(~self.matrix.any(axis=1))[0]
+        
+        output = []
+        return output
 
     def __str__(self):
         return "ETL enviroment"
