@@ -1,5 +1,6 @@
 class BaseActivity:
     def __init__(self,env=None,function=None,input=None,id=None,parent=None,output_name=None):
+        #attribute assignment
         self.env = env
         if id is None:
             self.id = len(self.env.items)
@@ -8,14 +9,17 @@ class BaseActivity:
         self.function = function
         self.parent = parent
         self.input = input
-        try:
-            self.env._add_item(self,parent)
-        except: pass
         self.output = None
         if output_name == None:
             self.output_name = f"output_{self.id}"
         else:
             self.output_name = output_name
+        
+        # do add item if env is not None
+        try:
+            self.env._add_item(self,parent)
+        except: pass
+        
             
     def config(self,var,value):
         """
