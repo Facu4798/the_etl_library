@@ -56,13 +56,13 @@ class MySQLConnector:
         result = self.cursor.fetchall()
         return pd.DataFrame(result, columns=[i[0] for i in self.cursor.description])
     
-    def check_existance(self, type,name):
-        self.cursor.execute(f"SHOW {type} LIKE '{name}'")
+    def check_existance(self, obj_type,name):
+        self.cursor.execute(f"SHOW {obj_type} LIKE '{name}'")
         return self.cursor.fetchone() is not None
 
     def insert_data(self,data,table_name,pks= None):
         # check table existance
-        if self.check_existance('TABLE', table_name):
+        if self.check_existance('TABLES', table_name):
             pass
         else:
             print(f"Table {table_name} does not exist.")
