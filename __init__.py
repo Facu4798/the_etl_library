@@ -4,8 +4,9 @@ The ETL Library - A Python library for ETL operations with credential management
 
 from .authentication import Credentials
 from .connectors import MySQLConnector, DTypeMapper
+from .activities import BaseActivity, Env
 
 __version__ = "0.1.0"
 __author__ = "Your Name"
 
-__all__ = ["Credentials", "MySQLConnector", "DTypeMapper"]
+__all__ = ["Credentials", "MySQLConnector", "DTypeMapper", "BaseActivity", "Env"]
