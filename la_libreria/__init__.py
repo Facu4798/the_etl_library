@@ -3,7 +3,7 @@ The ETL Library - A Python library for ETL operations with credential management
 """
 
 from .authentication import Credentials
-from .MySQL import MySQLConnector
+from .connectors import MySQLConnector
 from .base import BaseActivity
 from .enviroment import Env
 
