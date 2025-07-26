@@ -13,7 +13,7 @@ class Credentials:
         """Get the directory where credentials should be stored (in the library installation)"""
         
         module_dir = Path(__file__).parent # Get the directory where this module is installed
-        credentials_dir = module_dir / "credentials"
+        credentials_dir = module_dir
         
         return credentials_dir
 
