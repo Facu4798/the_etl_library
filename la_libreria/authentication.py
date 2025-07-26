@@ -12,9 +12,12 @@ class Credentials:
         module_dir = Path(__file__).parent # Get the directory where this module is installed
         credentials_dir = module_dir / "credentials"
         return credentials_dir
+
     def _get_credential_file_path(self, name=None):
         """Get the full path for a credential file"""
         return self._get_credentials_directory() / f"{name}.json"
+
+        
     def list(self):
         """
         lists all the credentials in the saved credentials directory
@@ -22,6 +25,8 @@ class Credentials:
         import os
         for f in os.listdir(self._get_credentials_directory()):
             print(f)
+
+
     def save(self, name=None, overwrite=False):
         """
         Save credentials to a file in the library installation directory
