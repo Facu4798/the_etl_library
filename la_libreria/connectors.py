@@ -86,7 +86,7 @@ class MySQLConnector:
             pass
         
         if data is not None and table_name is not None:
-            if self.check_existance('TABLE', table_name):
+            if self.check_existance('TABLES', table_name):
                 print(f"Table {table_name} already exists.")
                 return None
             dtype_mapper = DTypeMapper()
