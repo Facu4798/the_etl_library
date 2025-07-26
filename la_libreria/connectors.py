@@ -99,6 +99,7 @@ class MySQLConnector:
             if pks!=None:
                 q = q[:-1]  # remove last parenthesis
                 q += f", PRIMARY KEY ({', '.join(pks)}))"
+            print(q)
             self.cursor.execute(q)
             self.connection.commit()
 
