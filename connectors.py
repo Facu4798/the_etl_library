@@ -25,10 +25,9 @@ class MySQLConnector:
             )
             if connection.is_connected():
                 print("Connection successful")
-                return True
+                
         except mysql.connector.Error as err:
             print(f"Error: {err}")
-            return False
         finally:
             if connection and connection.is_connected():
                 connection.close()
