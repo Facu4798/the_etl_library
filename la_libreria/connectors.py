@@ -70,7 +70,7 @@ class MySQLConnector:
         
         # insert data
         import pandas as pd
-        if isinstance(data, pd.DataFrame,pks=None):
+        if isinstance(data, pd.DataFrame):
             columns = ', '.join(data.columns)
             placeholders = ', '.join(['%s'] * len(data.columns))
             query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
