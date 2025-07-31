@@ -41,6 +41,12 @@ class Env:
         if plot:
             img = plt.imread(f'dag_{timestamp}.png')
             plt.imshow(img)
+            # Get resolution from image metadata if available
+            height, width = img.shape[:2]
+            dpi = 100
+            width_inch = width / dpi
+            height_inch = height / dpi
+            plt.gcf().set_size_inches(width_inch, height_inch)
             plt.axis('off')
             plt.show()
 
