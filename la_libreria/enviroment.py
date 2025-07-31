@@ -5,7 +5,7 @@ class Env:
         import numpy as np
         self.matrix = np.array([])
 
-    def show(self,fig_scale=1.5,node_scale=1000):
+    def show(self,plot=True):
         """
         Plot a DAG of the environment's activities.
         The nodes are the activities, and the edges are data transfers between them.
@@ -16,6 +16,7 @@ class Env:
         import numpy as np
         from graphviz import Digraph
         from collections import defaultdict
+        import matplotlib.pyplot as plt
 
         # Create adjacency list from matrix for easier traversal
         n = len(self.items)
@@ -36,7 +37,13 @@ class Env:
                 dot.edge(self.items[node], self.items[n])
         from datetime import datetime
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        dot.render(f'dag_{timestamp}', view=True)
+        dot.render(f'dag_{timestamp}',format='png')
+        if plot:
+            img = plt.imread(f'dag_{timestamp}.png')
+            plt.figure(figsize=(10, 10))
+            plt.imshow(img)
+            plt.axis('off')
+            plt.show()
 
 
     def _add_item(self,item,parent=None):
