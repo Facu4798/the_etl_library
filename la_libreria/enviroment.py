@@ -34,7 +34,9 @@ class Env:
             dot.node(self.items[node])
             for n in neighbors:
                 dot.edge(self.items[node], self.items[n])
-        dot.render('dag.gv', view=True)
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        dot.render(f'dag_{timestamp}', view=True)
 
 
     def _add_item(self,item,parent=None):
