@@ -28,14 +28,12 @@ class Env:
                 if self.matrix[i, j] == 1:
                     adj_list[i].append(j) # add right vicinity to i
                     in_degree[j] += 1 # increase left vicinity of j
-
-        labels = {i: self.items[i] for i in range(len(self.items))}
         
         dot = Digraph()
         for node, neighbors in adj_list.items():
-            dot.node(node,label=node)
+            dot.node(self.items[node])
             for n in neighbors:
-                dot.edge(node, n)
+                dot.edge(self.items[node], self.items[n])
         dot.render('dag.gv', view=True)
 
 
