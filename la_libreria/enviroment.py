@@ -14,6 +14,8 @@ class Env:
         """
         import graphviz
         import numpy as np
+        from graphviz import Digraph
+        from collections import defaultdict
 
         # Create adjacency list from matrix for easier traversal
         n = len(self.items)
