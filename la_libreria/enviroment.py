@@ -12,30 +12,30 @@ class Env:
         - **fig_scale:** scale of the matplotlib figure
         - **node_scale:** scale of the nodes in the graph
         """
-        import networkx as nx
-        import matplotlib.pyplot as plt
+        import graphviz
         import numpy as np
 
-        # Create DAG from adjacency matrix
-        G = nx.from_numpy_array(self.matrix, create_using=nx.DiGraph)
-        
+        # Create adjacency list from matrix for easier traversal
+        n = len(self.items)
+        adj_list = defaultdict(list)
+        in_degree = [0] * n # left vicinity
+
+        # Build adjacency list and calculate in-degrees
+        for i in range(n):
+            for j in range(n):
+                if self.matrix[i, j] == 1:
+                    adj_list[i].append(j) # add right vicinity to i
+                    in_degree[j] += 1 # increase left vicinity of j
+
         labels = {i: self.items[i] for i in range(len(self.items))}
         
-        node_size = max(len(node) for node in self.items) * node_scale
-        print(node_size)
+        dot = Digraph()
+        for node, neighbors in adj_list.items():
+            dot.node(node,label=node)
+            for n in neighbors:
+                dot.edge(node, n)
+        dot.render('dag.gv', view=True)
 
-        plt.figure(figsize=(node_size/1000*fig_scale, node_size/1000*fig_scale))
-        # Plot with hierarchical layout
-        pos = nx.planar_layout(G)  # or nx.planar_layout(G) for DAGs
-        nx.draw(G, 
-                pos,
-                labels=labels, 
-                with_labels=True,
-                node_color='lightblue',
-                node_size=node_size,
-                arrows=True,
-                arrowsize=20)
-        plt.show()
 
     def _add_item(self,item,parent=None):
         
@@ -86,7 +86,6 @@ class Env:
                     adj_list[i].append(j) # add right vicinity to i
                     in_degree[j] += 1 # increase left vicinity of j
                     
-        
         # Topological sort using Kahn's algorithm
         num_roots = 0
         queue = deque()

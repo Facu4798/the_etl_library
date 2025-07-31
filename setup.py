@@ -12,7 +12,8 @@ setup(
         "matplotlib",
         "networkx",
         "mysql-connector-python",
-        "pandas"
+        "pandas",
+        "graphviz"
     ],
     python_requires=">=3.7",
     include_package_data=True,
