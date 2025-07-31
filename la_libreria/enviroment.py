@@ -40,7 +40,6 @@ class Env:
         dot.render(f'dag_{timestamp}',format='png')
         if plot:
             img = plt.imread(f'dag_{timestamp}.png')
-            plt.figure(figsize=(10, 10))
             plt.imshow(img)
             plt.axis('off')
             plt.show()
