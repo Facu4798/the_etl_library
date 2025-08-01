@@ -77,7 +77,7 @@ class Env:
                 self.matrix[parent_index, -1] = 1
         
 
-    def run(self,input=None):
+    def run(self,input=None,logger = None):
         """
         Execute all activities in the DAG based on topological order.
         Returns a dictionary mapping activity IDs to their outputs.
@@ -148,9 +148,9 @@ class Env:
             
             # Run the activity
             if count < num_roots:
-                activity.run(input)
+                activity.run(input, logger=logger)
             else:
-                activity.run()
+                activity.run(logger=logger)
 
         return None
 
@@ -169,4 +169,8 @@ class logger:
         self.logfile = os.path.join(path,f"log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
     
     def log(self,msg)
-        
+        fh = open(self.logfile,'a')
+        from datetime import datetime
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        fh.write(f"[{timestamp}] {msg}\n")
+        fh.close()
