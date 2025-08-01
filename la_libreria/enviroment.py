@@ -158,3 +158,15 @@ class Env:
         return "ETL environment"
     
 
+class logger:
+    def __init__(self,path=""):
+        import os 
+        self.path = path
+        if path != "":
+            if not os.path.exists(path):
+                os.makedirs(path)
+        from datetime import datetime
+        self.logfile = os.path.join(path,f"log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
+    
+    def log(self,msg)
+        
