@@ -15,7 +15,7 @@ class FileReader:
         
         # do add item if env is not None
         try:
-            self.env._add_item(self,parent)
+            self.env._add_item(self,self.parent)
         except: pass
         self.filepath_ = filepath
         self.format_ = format
@@ -81,7 +81,7 @@ class tableRegister:
 
         # do add item if env is not None
         try:
-            self.env._add_item(self,parent)
+            self.env._add_item(self,self.parent)
         except: pass
 
     def config(self,var,value):
@@ -136,7 +136,7 @@ class sqlTransformer:
 
         # do add item if env is not None
         try:
-            self.env._add_item(self,parent)
+            self.env._add_item(self,self.parent)
         except: pass
     
     def config(self,var,value):
