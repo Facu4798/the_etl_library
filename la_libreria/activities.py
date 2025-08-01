@@ -116,7 +116,7 @@ class tableRegister:
             logger.log(f"Table {self.table_name} registered.")
         return {self.output_name : self.output}
 
-        
+
 class sqlTransformer:
     def __init__(self,query,env=None,input=None,id=None,output_name=None,parent=None):
         #attribute assignment
@@ -167,3 +167,6 @@ class sqlTransformer:
         except:
             self.output = None
             raise ValueError("Input is not a polars DataFrame or LazyFrame.")
+        if logger is not None:
+            logger.log(f"SQL query executed at activity {self.id}.")
+        return {self.output_name : self.output}
