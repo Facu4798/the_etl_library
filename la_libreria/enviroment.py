@@ -77,11 +77,17 @@ class Env:
                 self.matrix[parent_index, -1] = 1
         
 
-    def run(self,input=None,logger = None):
+    def run(self,input=None,log_path = None):
         """
         Execute all activities in the DAG based on topological order.
         Returns a dictionary mapping activity IDs to their outputs.
         """
+        if log_path is not None:
+            logger_obj = logger(path=log_path)
+        else:
+            logger_obj = None
+        
+        
         import numpy as np
         from collections import deque, defaultdict
         
@@ -148,9 +154,9 @@ class Env:
             
             # Run the activity
             if count < num_roots:
-                activity.run(input, logger=logger)
+                activity.run(input, logger=logger_obj)
             else:
-                activity.run(logger=logger)
+                activity.run(logger=logger_obj)
 
         return None
 
