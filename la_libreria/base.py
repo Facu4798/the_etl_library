@@ -54,7 +54,7 @@ class BaseActivity:
         self.env._add_item(self,self.parent)
         return self
     
-    def run(self,input=None,logger=None):
+    def run(self,input=None):
         if self.function is None:
             return self.input
         if self.input is None:
@@ -62,8 +62,8 @@ class BaseActivity:
         else:    
             self.output = self.function(**self.input)
         self.input = None # clear input to release memory
-        if logger is not None:
-            logger.log(f"Activity {self.id} executed.")
+        if self.env.logger_obj is not None:
+            self.env.logger_obj.log(f"Activity {self.id} executed.")
         return {self.output_name : self.output}
 
     def __str__(self):

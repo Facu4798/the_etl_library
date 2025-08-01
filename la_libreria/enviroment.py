@@ -83,10 +83,10 @@ class Env:
         Returns a dictionary mapping activity IDs to their outputs.
         """
         if log_path is not None:
-            logger_obj = logger(path=log_path)
+            self.logger_obj = logger(path=log_path)
         else:
-            logger_obj = None
-        
+            self.logger_obj = None
+
         import polars as pl
         ctx = pl.SQLContext()
 
@@ -156,9 +156,9 @@ class Env:
             
             # Run the activity
             if count < num_roots:
-                activity.run(input, logger=logger_obj)
+                activity.run(input, logger=self.logger_obj)
             else:
-                activity.run(logger=logger_obj)
+                activity.run(logger=self.logger_obj)
 
         return None
 

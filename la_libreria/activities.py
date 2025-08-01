@@ -42,7 +42,7 @@ class FileReader:
         self.env._add_item(self,self.parent)
         return self
     
-    def run(self,logger=None):
+    def run(self):
         if self.function is None:
             return self.input
         def read_file(filepath, format):
@@ -55,8 +55,8 @@ class FileReader:
 
         self.output = read_file(self.filepath_, self.format_)
 
-        if logger is not None:
-            logger.log(f"File {self.filepath_} read.")
+        if self.env.logger_obj is not None:
+            self.env.logger_obj.log(f"File {self.filepath_} read.")
         return {self.output_name : self.output}
 
     def __str__(self):
@@ -106,14 +106,14 @@ class tableRegister:
         self.env._add_item(self,self.parent)
         return self
 
-    def run(self,logger=None):
+    def run(self):
         try:
             ctx.register(self.table_name,self.input)
         except:
             raise ValueError("Input is not a polars DataFrame or LazyFrame.")
         self.output = None
-        if logger is not None:
-            logger.log(f"Table {self.table_name} registered.")
+        if self.env.logger_obj is not None:
+            self.env.logger_obj.log(f"Table {self.table_name} registered.")
         return {self.output_name : self.output}
 
 
@@ -161,12 +161,12 @@ class sqlTransformer:
         self.env._add_item(self,self.parent)
         return self
     
-    def run(self,logger=None):
+    def run(self):
         try:
             self.output = ctx.execute(self.query)
         except:
             self.output = None
             raise ValueError("Input is not a polars DataFrame or LazyFrame.")
-        if logger is not None:
-            logger.log(f"SQL query executed at activity {self.id}.")
+        if self.env.logger_obj is not None:
+            self.env.logger_obj.log(f"SQL query executed at activity {self.id}.")
         return {self.output_name : self.output}
