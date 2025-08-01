@@ -156,9 +156,10 @@ class Env:
             
             # Run the activity
             if count < num_roots:
-                activity.run(input, logger=self.logger_obj)
+                activity.run(input)
             else:
-                activity.run(logger=self.logger_obj)
+                activity.run()
+            count += 1
 
         return None
 
