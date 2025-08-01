@@ -87,7 +87,9 @@ class Env:
         else:
             logger_obj = None
         
-        
+        import polars as pl
+        ctx = pl.SQLContext()
+
         import numpy as np
         from collections import deque, defaultdict
         
