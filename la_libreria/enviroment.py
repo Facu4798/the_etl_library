@@ -168,7 +168,7 @@ class logger:
         from datetime import datetime
         self.logfile = os.path.join(path,f"log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
     
-    def log(self,msg)
+    def log(self,msg):
         fh = open(self.logfile,'a')
         from datetime import datetime
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
