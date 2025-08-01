@@ -38,27 +38,33 @@ Credentials(params = {})
 
 ### Methods
 `add_credential(self, key=None, value=None,dict=None)`
+
 This method adds a single credential to the `Credentials` dictionary.
 
 - **key:** Name of the credential 
 - **value:** Value of the credential
 
 `show(self)`
+
 prints the credentials in the object
 
 `save(self, name=None, overwrite=False)`
+
 Saves the credentials in the object to a json file in the installation directory of the module.
 - **name:** Name of the file. The file name must not include the file extension
 - **overwrite:** True/False. Whether to overwrite a file with existing name. If it's set to false and file exists, it won't write a file.
 
 `load(self, name=None)`
+
 Loads a credentials json file to the object
 - **name:** Name of the json file. The file name must not include the file extension.
 
 `delete(self, name)`
+
 Delets a credentials json file in the module installation directory.
 - **name:** Name of the json file. The file name must not include the file extension.
 
 ### Attributes
 `dict`
+
 A dictionary of key:value pairs containing all the credentials in the object.
