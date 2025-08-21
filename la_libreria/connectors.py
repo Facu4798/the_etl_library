@@ -81,7 +81,7 @@ class MySQLConnector:
             self.cursor.executemany(query, values)
             self.connection.commit()
 
-    def create_table(self, query = None,data=None,table_name=None, pks=None):
+    def create_table(self, query = None,data=None,table_name=None, pks=None, exceptions = None):
         if query != None:
             pass
         
@@ -90,7 +90,7 @@ class MySQLConnector:
                 print(f"Table {table_name} already exists.")
                 return None
             dtype_mapper = DTypeMapper()
-            dtypes = dtype_mapper.map(data)
+            dtypes = dtype_mapper.map(data,exceptions=exceptions)
             q = f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
                 {', '.join(f'{col} {dtype}' for col, dtype in dtypes.items())}
@@ -117,7 +117,7 @@ class DTypeMapper:
     def __init__(self):
         self.map_dict = {}
 
-    def map(self,data):
+    def map(self,data,exceptions):
         import pandas as pd        
         dtypes = data.dtypes
         for col, dtype in dtypes.items():
@@ -133,6 +133,8 @@ class DTypeMapper:
                 self.map_dict[col] = 'BOOLEAN'
             else:
                 self.map_dict[col] = 'TEXT'
+        for col,dtype in exceptions.items():
+            self.map_dict[col] = dtype
         return self.map_dict
     
     def __str__(self):
