@@ -58,14 +58,17 @@ class Credentials:
             print(f"Error saving credentials: {e}")
             return None
 
-    def load(self, name=None):
+    def load(self, name=None, path=None):
         """
         Load credentials from a file in the library installation directory
         - name: name of the credential file to load
         
         Returns: True if successful, False otherwise
         """
-        file_path = self._get_credential_file_path(name)
+        if path is not None:
+            file_path = Path(path)
+        else:
+            file_path = self._get_credential_file_path(name)
         
         if not file_path.exists():
             print(f"Credential file '{file_path.name}' not found")
