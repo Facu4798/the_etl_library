@@ -78,6 +78,7 @@ class MySQLConnector:
                 update_set = ', '.join([f"{col} = VALUES({col})" for col in data.columns if col not in pks])
                 query += f" ON DUPLICATE KEY UPDATE {update_set}"
             values = [tuple(row) for row in data.values]
+            values = [tuple(None if isinstance(x, float) and np.isnan(x) else x for x in row) for row in data.values]
             self.cursor.executemany(query, values)
             self.connection.commit()
 
