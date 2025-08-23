@@ -70,6 +70,7 @@ class MySQLConnector:
         
         # insert data
         import pandas as pd
+        import numpy as np
         if isinstance(data, pd.DataFrame):
             columns = ', '.join(data.columns)
             placeholders = ', '.join(['%s'] * len(data.columns))
