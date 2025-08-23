@@ -101,7 +101,6 @@ class MySQLConnector:
             if pks!=None:
                 q = q.rstrip().rsplit(')', 1)[0]
                 q += f", PRIMARY KEY ({', '.join(pks)}))"
-            print(q)
             self.cursor.execute(q)
             self.connection.commit()
 
