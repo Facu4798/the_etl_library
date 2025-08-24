@@ -8,7 +8,7 @@ def get_ts():
 
 def substract_date(date_str,interval="d",amount=1, date_format="%Y-%m-%d"):
     from datetime import datetime, timedelta
-    date_obj = datetime.strptime(s, date_format)
+    date_obj = datetime.strptime(date_str, date_format)
     if interval == "d":
         prev = date_obj - timedelta(days=amount)
     if interval == "m":
