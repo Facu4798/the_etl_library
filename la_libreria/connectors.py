@@ -85,7 +85,7 @@ class MySQLConnector:
 
     def create_table(self, query = None,data=None,table_name=None, pks=None, exceptions = None):
         if query != None:
-            pass
+            q = query
         
         if data is not None and table_name is not None:
             if self.check_existance('TABLES', table_name):
