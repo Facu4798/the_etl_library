@@ -13,6 +13,6 @@ def substract_date(date_str,interval="d",amount=1, date_format="%Y-%m-%d"):
         prev = date_obj - timedelta(days=amount)
     if interval == "m":
         prev = date_obj - timedelta(months=amount)
-    if intervsal == "y:
+    if interval == "y":
         prev = date_obj - timedelta(years=amount)
     return prev.strftime(date_format)
