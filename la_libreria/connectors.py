@@ -80,9 +80,6 @@ class MySQLConnector:
                 query += f" ON DUPLICATE KEY UPDATE {update_set}"
             values = [tuple(row) for row in data.values]
             values = [tuple(None if isinstance(x, float) and np.isnan(x) else x for x in row) for row in data.values]
-            print(query)
-            print("\n\n")
-            print(values)
             self.cursor.executemany(query, values)
             self.connection.commit()
 
