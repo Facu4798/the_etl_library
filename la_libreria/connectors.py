@@ -83,7 +83,7 @@ class MySQLConnector:
             self.cursor.executemany(query, values)
             self.connection.commit()
 
-    def create_table(self, query = None,data=None,table_name=None, pks=None, exceptions = None):
+    def create_table(self, query = None,data=None,table_name=None, pks=None, exceptions = {}):
         if query != None:
             q = query
         
