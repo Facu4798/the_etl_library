@@ -18,11 +18,13 @@ def substract_date(date_str,interval="d",amount=1, date_format="%Y-%m-%d"):
     return prev.strftime(date_format)
 
 def parse_query(filepath,replacemment_dict={}):
+    import sys
     fp = filepath
     rd = replacement_dict
-    q = open(fp,"r").readlines()
-    q = " ".join(q)
-    q = q.replace("\n","")
-    for k,v in rd.items():
-        q = q.replace(k,v)
-    return q
+    try:
+        q = open(fp,"r").read()
+        for k,v in rd.items():
+            q = q.replace(k,v)
+        return q
+    except Exception as e:
+        sys.exit(e)
