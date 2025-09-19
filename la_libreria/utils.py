@@ -17,7 +17,7 @@ def substract_date(date_str,interval="d",amount=1, date_format="%Y-%m-%d"):
         prev = date_obj - timedelta(years=amount)
     return prev.strftime(date_format)
 
-def parse_query(filepath,replacemment_dict={}):
+def parse_query(filepath,replacement_dict={}):
     import sys
     fp = filepath
     rd = replacement_dict
