@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="la_libreria",
-    version="0.1.4",
+    version="0.1.5",
     description="The ETL Library - A Python library for ETL operations with credential management and database connectors",
     author="Your Name",
     packages=find_packages(),
