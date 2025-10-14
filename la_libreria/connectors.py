@@ -113,6 +113,27 @@ class MySQLConnector:
             print("No active connection to close")
         return self
 
+    def set_watermark(description=None,mark=None,table="cdc")
+        import pandas as pd
+        data = pd.dataFrame({
+            "Description":description,
+            "Date":mark
+        })
+        self.insert_data(data,table_name=table,pks=["Description"])
+        pass
+
+    def get_watermark(description,table="cdc",ifNone=None)
+        try:
+            date = self.get_data(f"SELECT Date from {table} where description = '{description}'")
+            date = data.head(1).iloc[0,0]
+            return date
+        except:
+            date = None
+            if ifNone != None:
+                return ifNone
+            else: 
+                return None
+
 
 class DTypeMapper:
     def __init__(self):
