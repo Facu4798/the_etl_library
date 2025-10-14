@@ -125,7 +125,7 @@ class MySQLConnector:
     def get_watermark(self,description,table="cdc",ifNone=None):
         try:
             date = self.get_data(f"SELECT Date from {table} where description = '{description}'")
-            date = data.head(1).iloc[0,0]
+            date = date.head(1).iloc[0,0]
             return date
         except:
             date = None
