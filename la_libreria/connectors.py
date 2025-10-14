@@ -113,7 +113,7 @@ class MySQLConnector:
             print("No active connection to close")
         return self
 
-    def set_watermark(description=None,mark=None,table="cdc")
+    def set_watermark(description=None,mark=None,table="cdc"):
         import pandas as pd
         data = pd.dataFrame({
             "Description":description,
@@ -122,7 +122,7 @@ class MySQLConnector:
         self.insert_data(data,table_name=table,pks=["Description"])
         pass
 
-    def get_watermark(description,table="cdc",ifNone=None)
+    def get_watermark(description,table="cdc",ifNone=None):
         try:
             date = self.get_data(f"SELECT Date from {table} where description = '{description}'")
             date = data.head(1).iloc[0,0]
@@ -133,7 +133,7 @@ class MySQLConnector:
                 return ifNone
             else: 
                 return None
-    def delete_watermark(description=None,table="cdc")
+    def delete_watermark(description=None,table="cdc"):
         self.cursor.execute(f"DELETE {table} where Description='{description}'")
         self.connection.commit()
 
