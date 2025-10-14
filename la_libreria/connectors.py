@@ -133,6 +133,9 @@ class MySQLConnector:
                 return ifNone
             else: 
                 return None
+    def delete_watermark(description=None,table="cdc")
+        self.cursor.execute(f"DELETE {table} where Description='{description}'")
+        self.connection.commit()
 
 
 class DTypeMapper:
