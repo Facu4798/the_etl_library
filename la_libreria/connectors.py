@@ -116,8 +116,8 @@ class MySQLConnector:
     def set_watermark(self,description=None,mark=None,table="cdc"):
         import pandas as pd
         data = pd.DataFrame({
-            "Description":description,
-            "Date":mark
+            "Description":[description],
+            "Date":[mark]
         })
         self.insert_data(data,table_name=table,pks=["Description"])
         pass
